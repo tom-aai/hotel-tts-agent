@@ -52,6 +52,7 @@ import {
   type AgentRuntime,
   createRuntime,
   createRuntimeServer,
+  ensureSessionStateSchema,
   type SessionRuntime,
 } from "@alexkroman1/aai-runtime";
 import { registerMetricsSink } from "@alexkroman1/aai-runtime/metrics";
@@ -312,7 +313,18 @@ async function main(): Promise<void> {
       `(providers interleaved): ` +
       engines.map((e) => `${e.row.label}:${e.row.provider}`).join(" -> "),
   );
-  if (!env.DATABASE_URL) {
+  if (env.DATABASE_URL) {
+    // With a URL set, the runtime picks the DURABLE Postgres session-state
+    // backend, which expects `aai_session_events` / `aai_session_state` to
+    // already exist. We own this database, so we apply the SDK's session-state
+    // DDL here — the one boot step `aai start`'s own server does and this custom
+    // server has to carry too. Without it every session dies at start with
+    // `relation "aai_session_events" does not exist` (a 1011 the client reads as
+    // "Session failed to start"), falling straight through to the survey. The
+    // call is best-effort and idempotent: a redeploy is a no-op, and a role that
+    // cannot CREATE (tables already migrated) just warns and continues.
+    await ensureSessionStateSchema({ url: env.DATABASE_URL, logger: console });
+  } else {
     console.warn(
       "[study] No DATABASE_URL: session state lives in THIS process's memory. " +
         "Fine for one always-on instance; behind a load balancer, keep sessions sticky.",
