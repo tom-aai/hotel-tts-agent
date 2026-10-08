@@ -20,10 +20,11 @@ export default agent({
   name: "The Harborlight Hotel",
   description:
     "Walks every caller through one fixed hotel-booking script, for the voice-preference study",
-  // Free/open-weight model on the AssemblyAI LLM Gateway. The frontier models
-  // (Claude, GPT, Gemini) are gated behind a paid tier; this one is AssemblyAI's
-  // own hosted model and is what their quickstarts default to.
-  llm: "qwen3.5-4b-32k-fast",
+  // Open-weight model on the AssemblyAI LLM Gateway. The previous default
+  // (`qwen3.5-4b-32k-fast`) rejects requests that carry tools/tool_choice, which
+  // the runtime always sends; this Gemma row supports tool calling, so the stage
+  // no longer 400s mid-call.
+  llm: "gemma-4-31b",
   /**
    * Wires `@user-transcript.committed` and `@session.timed-out` to the script.
    * `@user-transcript.committed` is the hinge every step turns on — without it
