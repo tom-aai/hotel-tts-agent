@@ -1,0 +1,39 @@
+{
+  "type": "module",
+  "packageManager": "npm@11.19.1",
+  "engines": {
+    "node": ">=24 <27"
+  },
+  "scripts": {
+    "dev": "aai dev",
+    "prestart": "aai build --skip-tests",
+    "start": "node server.ts",
+    "build": "aai build",
+    "test": "aai test",
+    "test:agent": "aai test --only",
+    "eval": "aai eval",
+    "publish:agent": "aai publish"
+  },
+  "dependencies": {
+    "@alexkroman1/aai": "^18.0.0",
+    "@alexkroman1/aai-cli": "^18.0.0",
+    "@alexkroman1/aai-runtime": "^18.0.0",
+    "@alexkroman1/aai-ui": "^18.0.0",
+    "postgres": "^3.4.9",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.0.0",
+    "xstate": "^5.32.6",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  }
+}

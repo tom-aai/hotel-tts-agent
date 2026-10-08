@@ -1,0 +1,1 @@
+function e(e){return URL.createObjectURL(new Blob([e],{type:`application/javascript`}))}export{e as t};
